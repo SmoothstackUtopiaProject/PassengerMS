@@ -27,7 +27,7 @@ pipeline {
                sh "touch ECSService.yml"
                sh "rm ECSService.yml"
                sh "wget https://raw.githubusercontent.com/SmoothstackUtopiaProject/CloudFormationTemplates/main/ECSService.yml"
-               sh "aws cloudformation deploy --stack-name UtopiaPassengerMS --template-file ./ECSService.yml --parameter-overrides ApplicationName=UtopiaPassengerMS ECRepositoryUri=$AWS_ID/utopiaairlines/passengerms:$COMMIT_HASH DBUsername=$DB_USERNAME DBPassword=$DB_PASSWORD SubnetID=$SUBNETID SecurityGroupID=$SECURITYGROUPID TGArn=$UTOPIA_PASSENGERMS_TARGETGROUP --capabilities \"CAPABILITY_IAM\" \"CAPABILITY_NAMED_IAM\""
+               sh "aws cloudformation deploy --stack-name UtopiaPassengerMS --template-file ./ECSService.yml --parameter-overrides ApplicationName=UtopiaPassengerMS ECRepositoryUri=$AWS_ID/utopiaairlines/passengerms:$COMMIT_HASH DBUsername=$DB_USERNAME DBPassword=$DB_PASSWORD SubnetID=$SUBNET_ID SecurityGroupID=$SECURITY_GROUP_ID TGArn=$UTOPIA_PASSENGERMS_TARGETGROUP --capabilities \"CAPABILITY_IAM\" \"CAPABILITY_NAMED_IAM\""
            }
         }
         stage('Cleanup') {
