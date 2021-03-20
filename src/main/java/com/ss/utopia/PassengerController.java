@@ -128,6 +128,8 @@ public class PassengerController {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
+	// Exception Handling
+	// ========================================================================
 	@ExceptionHandler(PassengerNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ResponseEntity<Object> passengerNotFoundException(Throwable err) {
