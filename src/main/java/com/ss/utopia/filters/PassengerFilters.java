@@ -1,4 +1,4 @@
-package com.ss.utopia.services;
+package com.ss.utopia.filters;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 import com.ss.utopia.models.Passenger;
 
-final class PassengerFilters {
+public final class PassengerFilters {
 
   private static final String PASSENGER_ID = "passengerId";
   private static final String PASSENGER_ID_BOOKING = "passengerBookingId";

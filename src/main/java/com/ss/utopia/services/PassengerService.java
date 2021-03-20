@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.ss.utopia.exceptions.PassengerAlreadyExistsException;
 import com.ss.utopia.exceptions.PassengerNotFoundException;
+import com.ss.utopia.filters.PassengerFilters;
 import com.ss.utopia.models.Passenger;
 import com.ss.utopia.repositories.PassengerRepository;
 
