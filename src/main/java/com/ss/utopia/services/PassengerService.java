@@ -39,11 +39,15 @@ public class PassengerService {
 		return optionalPassenger.get();
 	}
 
-	public List<Passenger> findByPassportId(String passengerPassportId) {
-		return passengerRepository.findByPassportId(passengerPassportId);
+	public Passenger findByPassportId(String passengerPassportId) throws PassengerNotFoundException {
+		Optional<Passenger> optionalPassenger = passengerRepository.findByPassportId(passengerPassportId);
+		if(!optionalPassenger.isPresent()) {
+			throw new PassengerNotFoundException("No Passenger with Passport ID: " + passengerPassportId + " exist!");
+		}
+		return optionalPassenger.get();
 	}
 
-	public List<Passenger> findByFilter(Map<String, String> filterMap) {
+	public List<Passenger> findBySearchAndFilter(Map<String, String> filterMap) {
 		List<Passenger> passengers = findAll();
 		if(!filterMap.keySet().isEmpty()) {
 			passengers = PassengerFilters.apply(passengers, filterMap);
@@ -55,18 +59,20 @@ public class PassengerService {
 		String passengerLastName, String passengerDateOfBirth, String passengerSex, String passengerAddress,
 		Boolean passengerIsVeteran) throws PassengerAlreadyExistsException {
 
-		List<Passenger> passengerExistCheck = findByPassportId(passengerPassportId);
-		if(!passengerExistCheck.isEmpty()) {
+		// Verify a Passenger with this Passport ID does not already exist
+		try {
+			findByPassportId(passengerPassportId);
 			throw new PassengerAlreadyExistsException(
 				"A Passenger with the Passport ID: " + 
 				passengerPassportId + " already exists."
 			);
+		} 
+		catch(PassengerNotFoundException err) {
+			return passengerRepository.save(new Passenger(
+				passengerBookingId, passengerPassportId, passengerFirstName, passengerLastName, 
+				passengerDateOfBirth, passengerSex, passengerAddress, passengerIsVeteran
+			));
 		}
-
-		return passengerRepository.save(new Passenger(
-			passengerBookingId, passengerPassportId, passengerFirstName, passengerLastName, 
-			passengerDateOfBirth, passengerSex, passengerAddress, passengerIsVeteran
-		));
 	}
 
 	public Passenger update(Integer passengerId, Integer passengerBookingId, String passengerPassportId, 
@@ -80,8 +86,9 @@ public class PassengerService {
 		));
 	}
 
-	public void delete(Integer id) throws IllegalArgumentException, PassengerNotFoundException {
+	public String delete(Integer id) throws IllegalArgumentException, PassengerNotFoundException {
 		findById(id);
 		passengerRepository.deleteById(id);
+		return "Passenger with ID: " + id + " was deleted.";
 	}
 }

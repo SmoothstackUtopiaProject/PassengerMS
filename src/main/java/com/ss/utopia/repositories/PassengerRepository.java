@@ -1,6 +1,5 @@
 package com.ss.utopia.repositories;
 
-import java.util.List;
 import java.util.Optional;
 
 import com.ss.utopia.models.Passenger;
@@ -16,6 +15,6 @@ public interface PassengerRepository extends JpaRepository<Passenger, Integer> {
   Optional<Passenger> findByBookingId(Integer bookingId);
 
   @Query(value = "SELECT * FROM passenger WHERE passport_id = ?1", nativeQuery = true)
-  List<Passenger> findByPassportId(String passportId);
+  Optional<Passenger> findByPassportId(String passportId);
   
 }

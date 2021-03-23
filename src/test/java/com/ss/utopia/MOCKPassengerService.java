@@ -2,12 +2,11 @@ package com.ss.utopia;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.ss.utopia.models.Passenger;
 
-public class MOCKPassengerRepository {
+public class MOCKPassengerService {
 
   private static final Passenger testPassenger = new Passenger(1, 6, "AFHAJKFHKAJS", "FirstName1", "LastName1", "1987-3-14", "MALE", "2342 Water Lane 4291 RockCity Virginia", true);
 
@@ -41,16 +40,20 @@ public class MOCKPassengerRepository {
     return emptyPassengerList;
   }
 
-  public static Optional<Passenger> findById(Integer id) {
+  public static Passenger findById(Integer id) {
     List<Passenger> passengerByIdList = getTestPassengerList().stream()
       .filter(i -> i.getPassengerId().equals(id))
       .collect(Collectors.toList());
-    return Optional.of(passengerByIdList.get(0));
+    return !passengerByIdList.isEmpty()
+      ? passengerByIdList.get(0)
+      : null;
   }
 
   public static Passenger save(Passenger passenger) {
     return passenger;
   }
 
-  public static void deleteById() {}
+  public static String deleteById(Integer id) {
+    return "Passenger with ID: " + id + " was deleted.";
+  }
 }

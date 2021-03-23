@@ -54,7 +54,7 @@ public class PassengerController {
 		return new ResponseEntity<>(passenger, HttpStatus.OK);
 	}
 
-	@GetMapping("/booking/{id}")
+	@GetMapping("/booking/{bookingId}")
 	public ResponseEntity<Object> findByBookingId(@PathVariable String bookingId) 
 	throws PassengerNotFoundException {
 		Integer formattedBookingId = Integer.parseInt(bookingId);
@@ -62,17 +62,16 @@ public class PassengerController {
 		return new ResponseEntity<>(passenger, HttpStatus.OK);
 	}
 
-	@GetMapping("/passport/{id}")
-	public ResponseEntity<Object> findByPassportId(@PathVariable String id) {
-		List<Passenger> passengerList = passengerService.findByPassportId(id);
-		return passengerList.isEmpty()
-			? new ResponseEntity<>(passengerList, HttpStatus.OK)
-			: new ResponseEntity<>(new ErrorMessage("No Passenger with Passport ID: " + id + " exists."), HttpStatus.NOT_FOUND);
+	@GetMapping("/passport/{passportId}")
+	public ResponseEntity<Object> findByPassportId(@PathVariable String passportId)
+	throws PassengerNotFoundException  {
+		Passenger passenger = passengerService.findByPassportId(passportId);
+		return new ResponseEntity<>(passenger, HttpStatus.OK);
 	}
 
 	@PostMapping("/search")
-	public ResponseEntity<Object> findByFilter(@RequestBody Map<String, String> filterMap) {
-		List<Passenger> passengers = passengerService.findByFilter(filterMap);
+	public ResponseEntity<Object> findBySearchAndFilter(@RequestBody Map<String, String> filterMap) {
+		List<Passenger> passengers = passengerService.findBySearchAndFilter(filterMap);
 		return !passengers.isEmpty()
 			? new ResponseEntity<>(passengers, HttpStatus.OK)
 			: new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -123,12 +122,21 @@ public class PassengerController {
 	public ResponseEntity<Object> delete(@PathVariable String passengerId) 
 	throws IllegalArgumentException, PassengerNotFoundException {
 		Integer formattedId = Integer.parseInt(passengerId);
-		passengerService.delete(formattedId);
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		String deleteInformation = passengerService.delete(formattedId);
+		return new ResponseEntity<>(deleteInformation, HttpStatus.ACCEPTED);
 	}
 
 	// Exception Handling
 	// ========================================================================
+	@ExceptionHandler(PassengerAlreadyExistsException.class)
+	@ResponseStatus(HttpStatus.CONFLICT)
+	public ResponseEntity<Object> passengerAlreadyExistsException(Throwable err) {
+		return new ResponseEntity<>(
+			new ErrorMessage(err.getMessage()), 
+			HttpStatus.CONFLICT
+		);
+	}
+
 	@ExceptionHandler(PassengerNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ResponseEntity<Object> passengerNotFoundException(Throwable err) {
@@ -152,6 +160,15 @@ public class PassengerController {
 	public ResponseEntity<Object> invalidMessage() {
 		return new ResponseEntity<>(
 			new ErrorMessage("Invalid HTTP message content."), 
+			HttpStatus.BAD_REQUEST
+		);
+	}
+
+	@ExceptionHandler(NumberFormatException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ResponseEntity<Object> invalidParameters(Throwable err) {
+		return new ResponseEntity<>(
+			new ErrorMessage(err.getMessage()), 
 			HttpStatus.BAD_REQUEST
 		);
 	}
