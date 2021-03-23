@@ -1,6 +1,5 @@
 package com.ss.utopia.services;
 
-import java.sql.Date;
 import java.util.Map;
 import java.util.List;
 import java.util.Optional;
@@ -53,7 +52,7 @@ public class PassengerService {
 	}
 
 	public Passenger insert(Integer passengerBookingId, String passengerPassportId, String passengerFirstName, 
-		String passengerLastName, Date passengerDateOfBirth, String passengerSex, String passengerAddress,
+		String passengerLastName, String passengerDateOfBirth, String passengerSex, String passengerAddress,
 		Boolean passengerIsVeteran) throws PassengerAlreadyExistsException {
 
 		List<Passenger> passengerExistCheck = findByPassportId(passengerPassportId);
@@ -71,7 +70,7 @@ public class PassengerService {
 	}
 
 	public Passenger update(Integer passengerId, Integer passengerBookingId, String passengerPassportId, 
-	String passengerFirstName, String passengerLastName, Date passengerDateOfBirth, String passengerSex, 
+	String passengerFirstName, String passengerLastName, String passengerDateOfBirth, String passengerSex, 
 	String passengerAddress, Boolean passengerIsVeteran) throws PassengerNotFoundException {	
 
 		findById(passengerId);

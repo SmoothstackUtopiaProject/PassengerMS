@@ -1,7 +1,6 @@
 package com.ss.utopia;
 
 import java.net.ConnectException;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.List;
@@ -86,7 +85,7 @@ public class PassengerController {
 		String passengerPassportId = passengerMap.get("passengerPassportId");
 		String passengerFirstName = passengerMap.get("passengerFirstName");
 		String passengerLastName = passengerMap.get("passengerLastName");
-		Date passengerDateOfBirth = Date.valueOf(passengerMap.get("passengerDateOfBirth"));
+		String passengerDateOfBirth = passengerMap.get("passengerDateOfBirth");
 		String passengerSex = passengerMap.get("passengerSex");
 		String passengerAddress = passengerMap.get("passengerAddress");
 		Boolean passengerIsVeteran = Boolean.parseBoolean(passengerMap.get("passengerIsVeteran"));
@@ -107,7 +106,7 @@ public class PassengerController {
 		String passengerPassportId = passengerMap.get("passengerPassportId");
 		String passengerFirstName = passengerMap.get("passengerFirstName");
 		String passengerLastName = passengerMap.get("passengerLastName");
-		Date passengerDateOfBirth = Date.valueOf(passengerMap.get("passengerDateOfBirth"));
+		String passengerDateOfBirth = passengerMap.get("passengerDateOfBirth");
 		String passengerSex = passengerMap.get("passengerSex");
 		String passengerAddress = passengerMap.get("passengerAddress");
 		Boolean passengerIsVeteran = Boolean.parseBoolean(passengerMap.get("passengerIsVeteran"));

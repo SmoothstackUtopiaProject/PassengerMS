@@ -1,6 +1,5 @@
 package com.ss.utopia.filters;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Collection;
@@ -62,8 +61,7 @@ public final class PassengerFilters {
 
 		// DateOfBirth
 		if(filterMap.keySet().contains(PASSENGER_DATE_OF_BIRTH)) {
-			Date parsedPassengerDOB = Date.valueOf(filterMap.get(PASSENGER_DATE_OF_BIRTH));
-			passengers = PassengerFilters.filterByPassengerDateOfBirth(passengers, parsedPassengerDOB);
+			passengers = PassengerFilters.filterByPassengerDateOfBirth(passengers, filterMap.get(PASSENGER_DATE_OF_BIRTH));
 		}
 
 		// Sex
@@ -119,7 +117,7 @@ public final class PassengerFilters {
   (Collection<Passenger> passengers, Integer passengerAge) {
     return passengers.parallelStream()
       .filter(i -> Period.between(
-        i.getPassengerDateOfBirth().toLocalDate(), 
+        LocalDate.parse(i.getPassengerDateOfBirth()), 
         LocalDate.now()
       )
       .getYears() == (passengerAge))
@@ -130,7 +128,7 @@ public final class PassengerFilters {
   (Collection<Passenger> passengers, Integer passengerAge) {
     return passengers.parallelStream()
       .filter(i -> Period.between(
-        i.getPassengerDateOfBirth().toLocalDate(), 
+         LocalDate.parse(i.getPassengerDateOfBirth()), 
         LocalDate.now()
       )
       .getYears() > (passengerAge))
@@ -141,7 +139,7 @@ public final class PassengerFilters {
   (Collection<Passenger> passengers, Integer passengerAge) {
     return passengers.parallelStream()
       .filter(i -> Period.between(
-        i.getPassengerDateOfBirth().toLocalDate(), 
+         LocalDate.parse(i.getPassengerDateOfBirth()), 
         LocalDate.now()
       )
       .getYears() < (passengerAge))
@@ -156,7 +154,7 @@ public final class PassengerFilters {
   }
 
   public static List<Passenger> filterByPassengerDateOfBirth 
-  (Collection<Passenger> passengers, Date passengerDateOfBirth) {
+  (Collection<Passenger> passengers, String passengerDateOfBirth) {
     return passengers.parallelStream()
       .filter(i -> i.getPassengerDateOfBirth().equals(passengerDateOfBirth))
       .collect(Collectors.toList());
@@ -211,14 +209,14 @@ public final class PassengerFilters {
     for(String searchTerm : splitTerms) {
       passengers = passengers.parallelStream()
       .filter((Passenger i) ->
-          i.getPassengerId().toString().contains(searchTerm) ||
-          i.getPassengerBookingId().toString().contains(searchTerm) ||
-          i.getPassengerPassportId().contains(searchTerm) ||
-          i.getPassengerFirstName().contains(searchTerm) ||
-          i.getPassengerLastName().contains(searchTerm) ||
-          i.getPassengerDateOfBirth().toString().contains(searchTerm) ||
-          i.getPassengerSex().contains(searchTerm) ||
-          i.getPassengerAddress().contains(searchTerm)
+          i.getPassengerId().toString().toLowerCase(Locale.getDefault()).contains(searchTerm) ||
+          i.getPassengerBookingId().toString().toLowerCase(Locale.getDefault()).contains(searchTerm) ||
+          i.getPassengerPassportId().toLowerCase(Locale.getDefault()).contains(searchTerm) ||
+          i.getPassengerFirstName().toLowerCase(Locale.getDefault()).contains(searchTerm) ||
+          i.getPassengerLastName().toLowerCase(Locale.getDefault()).contains(searchTerm) ||
+          i.getPassengerDateOfBirth().toLowerCase(Locale.getDefault()).contains(searchTerm) ||
+          i.getPassengerSex().toLowerCase(Locale.getDefault()).contains(searchTerm) ||
+          i.getPassengerAddress().toLowerCase(Locale.getDefault()).contains(searchTerm)
       ).collect(Collectors.toList());
     }
 		return passengers;
