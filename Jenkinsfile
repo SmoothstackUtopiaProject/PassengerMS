@@ -29,7 +29,7 @@ pipeline {
                sh "touch ECSService.yml"
                sh "rm ECSService.yml"
                sh "wget https://raw.githubusercontent.com/SmoothstackUtopiaProject/CloudFormationTemplates/main/ECSService.yml"
-               ./CloudFormation.sh.execute();
+               sh(script: "./CloudFormation").trim()
            }
         }
         stage('Cleanup') {
