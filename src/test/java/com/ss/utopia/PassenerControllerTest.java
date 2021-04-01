@@ -34,7 +34,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @WebMvcTest(controllers = PassengerController.class)
-@ActiveProfiles("User Controller Test")
+@ActiveProfiles("Passenger Controller Test")
 class PassengerControllerTest {
 
   private final String SERVICE_PATH_PASSENGERS = "/passengers";
