@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        APPLICATION_NAME="UtopiaPassengerMS"
+        APPLICATION_NAME="utopiapassengerms"
         APPLICATION_REPOSITORY="utopia/utopiapassengerms"
         COMMIT_HASH="${sh(script:'git rev-parse --short HEAD', returnStdout: true).trim()}"
     }
@@ -11,8 +11,6 @@ pipeline {
             steps {
                 echo 'Building..'
                 script {
-                    echo "env"
-                    echo "DB_HOST"
                     sh "mvn clean package"
                 }
             }
