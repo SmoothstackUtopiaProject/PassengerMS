@@ -1,7 +1,8 @@
 pipeline {
     agent any
     environment {
-        APPLICATION_NAME = 'utopiapassengerms'
+        APPLICATION_NAME = 'UtopiaPassengerMS'
+        APPLICATION_NAME_LOWERCASE = 'utopiapassengerms'
         APPLICATION_REPOSITORY = 'utopia/utopiapassengerms'
         COMMIT_HASH = "${sh(script:'git rev-parse --short HEAD', returnStdout: true).trim()}"
     }
@@ -19,8 +20,8 @@ pipeline {
             steps {
                 echo 'Deploying....'
                 sh "$AWS_LOGIN"
-                sh "docker build --tag $APPLICATION_NAME:$COMMIT_HASH ."
-                sh "docker tag $APPLICATION_NAME:$COMMIT_HASH $AWS_ID/$APPLICATION_REPOSITORY:$COMMIT_HASH"
+                sh "docker build --tag $APPLICATION_NAME_LOWERCASE:$COMMIT_HASH ."
+                sh "docker tag $APPLICATION_NAME_LOWERCASE:$COMMIT_HASH $AWS_ID/$APPLICATION_REPOSITORY:$COMMIT_HASH"
                 sh "docker push $AWS_ID/$APPLICATION_REPOSITORY:$COMMIT_HASH"
             }
         }
