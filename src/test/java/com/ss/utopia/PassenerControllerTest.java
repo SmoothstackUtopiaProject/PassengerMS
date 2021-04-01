@@ -21,34 +21,37 @@ import com.ss.utopia.services.PassengerService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
-@SpringBootTest
+@WebMvcTest(controllers = PassengerController.class)
+@ActiveProfiles("User Controller Test")
 class PassengerControllerTest {
 
   private final String SERVICE_PATH_PASSENGERS = "/passengers";
   private final ObjectMapper mapper = new ObjectMapper();
 
-  @InjectMocks
-  private PassengerController controller;
-
-  @Mock
+  @MockBean
   private PassengerService service;
+
+  @Autowired
+  private WebApplicationContext webApplicationContext;
 
   private MockMvc mvc;
   private HttpHeaders headers;
 
   @BeforeEach
   void setup() throws Exception {
-    mvc = MockMvcBuilders.standaloneSetup(controller).build();
+    mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     Mockito.reset(service);
     headers = new HttpHeaders();
     headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));

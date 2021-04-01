@@ -11,6 +11,8 @@ pipeline {
             steps {
                 echo 'Building..'
                 script {
+                    echo "env"
+                    echo "DB_HOST"
                     sh "mvn clean package"
                 }
             }
