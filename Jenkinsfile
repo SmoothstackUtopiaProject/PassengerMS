@@ -38,8 +38,8 @@ pipeline {
                 sh 'touch CloudDeploy.sh'
                 sh 'rm CloudDeploy.sh'
                 sh 'wget https://raw.githubusercontent.com/SmoothstackUtopiaProject/CloudFormationTemplates/main/CloudDeploy.sh'
-                sh 'chmod 777 ./CloudDeployment.sh'
-                sh 'exec ./CloudDeployment.sh'
+                sh 'chmod 777 ./CloudDeploy.sh'
+                sh 'exec ./CloudDeploy.sh'
             }
         }
         stage('Cleanup') {
