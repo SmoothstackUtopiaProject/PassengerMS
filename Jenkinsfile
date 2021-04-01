@@ -1,6 +1,8 @@
 pipeline {
     agent any
     environment {
+        APPLICATION_NAME="UtopiaPassengerMS"
+        APPLICATION_REPOSITORY="utopia/utopiapassengerms"
         COMMIT_HASH="${sh(script:'git rev-parse --short HEAD', returnStdout: true).trim()}"
     }
 
@@ -17,9 +19,9 @@ pipeline {
             steps {
                 echo 'Deploying....'
                 sh "$AWS_LOGIN"                
-                sh "docker build --tag utopiapassengerms:$COMMIT_HASH ."
-                sh "docker tag utopiapassengerms:$COMMIT_HASH $AWS_ID/utopiaairlines/passengerms:$COMMIT_HASH"
-                sh "docker push $AWS_ID/utopiaairlines/passengerms:$COMMIT_HASH"
+                sh "docker build --tag $APPLICATION_NAME:$COMMIT_HASH ."
+                sh "docker tag $APPLICATION_NAME:$COMMIT_HASH $AWS_ID/$APPLICATION_REPOSITORY:$COMMIT_HASH"
+                sh "docker push $AWS_ID/$APPLICATION_REPOSITORY:$COMMIT_HASH"
             }
         }
         stage('Deploy') {
@@ -27,7 +29,7 @@ pipeline {
                sh "touch ECSService.yml"
                sh "rm ECSService.yml"
                sh "wget https://raw.githubusercontent.com/SmoothstackUtopiaProject/CloudFormationTemplates/main/ECSService.yml"
-               sh "aws cloudformation deploy --stack-name UtopiaPassengerMS --template-file ./ECSService.yml --parameter-overrides ApplicationName=UtopiaPassengerMS ECRepositoryUri=$AWS_ID/utopiaairlines/passengerms:$COMMIT_HASH DBUsername=$DB_USERNAME DBPassword=$DB_PASSWORD SubnetID=$SUBNET_ID SecurityGroupID=$SECURITY_GROUP_ID TGArn=$UTOPIA_PASSENGERMS_TARGETGROUP --capabilities \"CAPABILITY_IAM\" \"CAPABILITY_NAMED_IAM\""
+               "./CloudFormation".execute();
            }
         }
         stage('Cleanup') {
